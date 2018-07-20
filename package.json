@@ -7,5 +7,12 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Pedro Bazan",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "archiver": "^2.1.1",
+    "gulp": "^3.9.1",
+    "minimist": "^1.2.0",
+    "nconf": "^0.10.0",
+    "shelljs": "^0.8.2"
+  }
 }
