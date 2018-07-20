@@ -1,0 +1,11 @@
+{
+  "name": "sugarcrm-package-installer-cli",
+  "version": "1.0.0",
+  "description": "instalador de paquetes por linea de comandos para sugarcrm",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Pedro Bazan",
+  "license": "ISC"
+}
