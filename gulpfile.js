@@ -26,9 +26,9 @@ gulp.task('help', () => {
 });
 
 nconf.file({ file: "config.json" });
-let project_conf = nconf.get('projects:'+project_name);
-let dependencies = [];
-const build_dir = project_conf.base_dir+"/build";
+var project_conf = nconf.get('projects:'+project_name);
+var dependencies = [];
+const build_dir = project_conf.packages_dir+"/build";
 gulp.task('get_dependencies', () => {
   // console.log("dependencies:", project_conf.dependencies);
   dependencies = Object.keys(project_conf.dependencies);
@@ -38,7 +38,7 @@ gulp.task('get_dependencies', () => {
 
 gulp.task('build_packages', () => {
   dependencies.forEach((item) => {
-    var output = fs.createWriteStream(project_conf.base_dir+"/build/"+item+'.zip');
+    var output = fs.createWriteStream(build_dir+"/"+item+'.zip');
     output.on('end', function() {
       console.log('Data has been drained');
     });
@@ -46,17 +46,29 @@ gulp.task('build_packages', () => {
       zlib: { level: 9 } // Sets the compression level.
     });
     archive.pipe(output);
-    archive.append(fs.createReadStream([project_conf.base_dir,item,"manifest.php"].join("/")), { name: "manifest.php" });
-    archive.directory([project_conf.base_dir,item,"custom"].join("/"), "custom");
-    archive.directory([project_conf.base_dir,item,"scripts"].join("/"), "scripts");
+    archive.append(fs.createReadStream([project_conf.packages_dir,item,"manifest.php"].join("/")), { name: "manifest.php" });
+    archive.directory([project_conf.packages_dir,item,"custom"].join("/"), "custom");
+    archive.directory([project_conf.packages_dir,item,"scripts"].join("/"), "scripts");
     archive.finalize();
   });
 });
 
-gulp.task('install_packages', () => {
-  dependencies.forEach((item) => {
+gulp.task('install_packages', function*() {
+  // dependencies.forEach((item) => {
+    shell.cp("cliModuleInstall.php", project_conf.instance_dir);
+    shell.cd(project_conf.instance_dir);
+    console.log("Instalando Paquete");
+    var command = "./cliModuleInstall.php -i " + project_conf.instance_dir + " -z " + build_dir + "/CF_AforeXXI.zip";
+    // var command = "./cliModuleInstall.php -i " + project_conf.instance_dir + " -z " + project_conf.packages_dir + "/CF_AforeXXI/CF_AforeXXI.zip";
+    console.log("command: ", command);
+    shell.exec(command);
+    console.log("Paquete Instalado");
 
-  });
+    console.log("Reparando Instancia");
+    var command = "php repair.php";
+    shell.exec(command);
+    console.log("Instancia Reparada");
+  // });
 });
 
 gulp.task('default', ["get_dependencies", "build_packages", "install_packages"]);
