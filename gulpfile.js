@@ -54,7 +54,9 @@ gulp.task('build_packages', () => {
 });
 
 gulp.task('install_packages', () => {
+  dependencies.forEach((item) => {
 
+  });
 });
 
-gulp.task('default', ["get_dependencies", "build_packages"]);
+gulp.task('default', ["get_dependencies", "build_packages", "install_packages"]);
