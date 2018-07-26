@@ -155,7 +155,7 @@ function perform_module_install($opts)
 
     $new_upgrade->save();
     $file = "$unzip_dir/" . constant('SUGARCRM_POST_INSTALL_FILE');
-    // echo "\nfile:".$file."\n";
+    echo "\nfile:".$file."\n";
     if(is_file($file))
     {
         echo "\nEntra a Post install:";
