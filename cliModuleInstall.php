@@ -1,5 +1,6 @@
 #!/usr/bin/env php
 <?php
+use Sugarcrm\Sugarcrm\Util\Files\FileLoader;
 
 function output_msg($msg)
 {
@@ -141,6 +142,7 @@ function perform_module_install($opts)
     if(is_file($file))
     {
         // echo "\nEntra a Post install:";
+        include FileLoader::validateFilePath($file);
         pre_install();
     }
     $new_upgrade->filename = $local_zip_file;
@@ -157,6 +159,7 @@ function perform_module_install($opts)
     if(is_file($file))
     {
         echo "\nEntra a Post install:";
+        include FileLoader::validateFilePath($file);
         post_install();
     }
     output_msg('Installed: version: ' . $new_upgrade->version . ' md5sum: ' . $new_upgrade->md5sum);
