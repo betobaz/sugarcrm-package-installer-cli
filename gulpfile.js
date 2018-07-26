@@ -59,7 +59,8 @@ gulp.task('install_packages', function() {
     console.log("Instalando Paquete");
     var command = "./cliModuleInstall.php -i " + project_conf.instance_dir + " -z " + build_dir + "/"+item+".zip";
     console.log("command: ", command);
-    shell.exec(command, {silent:true});
+    //shell.exec(command, {silent:true});
+    shell.exec(command);
     console.log("Paquete Instalado");
 
     console.log("Reparando Instancia");

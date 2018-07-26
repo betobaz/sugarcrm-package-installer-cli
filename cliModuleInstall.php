@@ -145,8 +145,10 @@ function perform_module_install($opts)
     $new_upgrade->save();
     $unzip_dir = $opts['expanded_zip'];
     $file = "$unzip_dir/" . constant('SUGARCRM_POST_INSTALL_FILE');
+    echo "\nfile:".$file."\n";
     if(is_file($file))
     {
+        echo "\nEntra a Post install:";
         // print("{$mod_strings['LBL_UW_INCLUDING']}: $file <br>\n");
         // include FileLoader::validateFilePath($file);
         post_install();
