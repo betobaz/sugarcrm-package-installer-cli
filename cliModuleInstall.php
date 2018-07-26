@@ -57,7 +57,7 @@ function unzip_package($zip_file)
 
 function perform_module_install($opts)
 {
-    require_once 'modules/Administration/UpgradeWizardCommon.php';
+    define('SUGARCRM_POST_INSTALL_FILE', 'scripts/post_install.php');
     global $sugar_config, $mod_strings, $current_language, $current_user;
 
     if ($opts['zip_file'] !== false && !is_readable($opts['zip_file'])) {
