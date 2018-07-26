@@ -6,7 +6,8 @@ const shell = require('shelljs');
 const fs = require('fs');
 
 const knownOptions = {
-  "omit-build-packages": false
+  "omit-build-packages": false,
+  "omit-install": false
 };
 
 const options = minimist(process.argv.slice(2), knownOptions);
@@ -42,25 +43,14 @@ gulp.task('build_packages', () => {
   shell.cd(project_conf.packages_dir);
   dependencies.forEach((item) => {
     shell.cd(item);
-    var command = "zip -r " + build_dir + "/"+item + ".zip ."; 
+    var command = "zip -r " + build_dir + "/"+item + ".zip . -x .DS_Store *.md"; 
     shell.exec(command, {silent:true});
     shell.cd('..');
-    /*var output = fs.createWriteStream(build_dir+"/"+item+'.zip');
-    output.on('end', function() {
-      console.log('Data has been drained');
-    });
-    archive = archiver('zip', {
-      zlib: { level: 0 } // Sets the compression level.
-    });
-    archive.pipe(output);
-    archive.append(fs.createReadStream([project_conf.packages_dir,item,"manifest.php"].join("/")), { name: "manifest.php" });
-    archive.directory([project_conf.packages_dir,item,"custom"].join("/"), "custom");
-    archive.directory([project_conf.packages_dir,item,"scripts"].join("/"), "scripts");
-    archive.finalize();*/
   });
 });
 
 gulp.task('install_packages', function() {
+  if(options['omit-install']) return false;
   shell.cd(__dirname);
   shell.cp("cliModuleInstall.php", project_conf.instance_dir);
   shell.cd(project_conf.instance_dir);
