@@ -4,6 +4,7 @@ const minimist = require('minimist');
 const archiver = require('archiver');
 const shell = require('shelljs');
 const fs = require('fs');
+const path = require('path'); 
 
 const knownOptions = {
   "omit-build-packages": false,
@@ -32,9 +33,14 @@ var dependencies = [];
 const build_dir = project_conf.packages_dir+"/build";
 
 gulp.task('get_dependencies', () => {
-  // console.log("dependencies:", project_conf.dependencies);
-  dependencies = Object.keys(project_conf.dependencies);
-
+  if (fs.existsSync(project_conf.packages_dir+"/Merxfile.json")) { 
+    console.log("Merxfile.json existe");
+    let merxfile = JSON.parse(fs.readFileSync(project_conf.packages_dir+"/Merxfile.json"), 'utf8'); 
+    dependencies = Object.keys(merxfile.dependencies);
+  } 
+  else{
+    dependencies = Object.keys(project_conf.dependencies);
+  }
   shell.mkdir('-p', build_dir);
 });
 
@@ -55,7 +61,9 @@ gulp.task('install_packages', function() {
   shell.cp("cliModuleInstall.php", project_conf.instance_dir);
   shell.cd(project_conf.instance_dir);
   dependencies.forEach((item) => {
-    shell.cp(build_dir + "/" + item +".zip", project_conf.instance_dir + "/upload/upgrades/module/" );
+    if (!fs.existsSync(project_conf.instance_dir + "/upload/upgrades/module/"+ item +".zip")) { 
+   	 shell.cp(build_dir + "/" + item +".zip", project_conf.instance_dir + "/upload/upgrades/module/" );
+    }
     console.log("Instalando Paquete");
     var command = "./cliModuleInstall.php -i " + project_conf.instance_dir + " -z " + build_dir + "/"+item+".zip";
     console.log("command: ", command);
